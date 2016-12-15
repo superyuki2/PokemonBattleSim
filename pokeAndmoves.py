@@ -13,9 +13,16 @@ import pokemon
 
 # 	def __init__(self, name, attribute1, attribute2, status, hp, attack, \
 #		defense, spAttack, spDefense, speed, moves):
-# def __init__(self, name, attribute, damage, effect):
+# def __init__(self, name, attribute, damage, effect, phys, acc, PP):
 
-pokemon.Move('Draco Meteor', 'Dragon', )
+allMoves = [pokemon.Move('Draco Meteor', 'Dragon', 130, True, False, 90, 5),
+pokemon.Move('Fire Blast', 'Fire', 110, True, False, 85, 5),
+pokemon.Move('Superpower', 'Fighting', 120, True, True, 100, 5),
+pokemon.Move('ExtremeSpeed', 'Normal', 80, True, True, 100, 5),
+]
+
+allPokemon = [pokemon.Pokemon('Dragonite', 'Dragon', 'Flying', None, 292, 197, 95, 163, 100, 81, allMoves[0:4])
+]
 
 # Dusclops @ Eviolite 
 # Trait: 
@@ -61,5 +68,3 @@ pokemon.Move('Draco Meteor', 'Dragon', )
 # - Close Combat 
 # - Stone Edge 
 # - Leaf Blade 
-allMoves = [1]
-allPokemon = [1]
