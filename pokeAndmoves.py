@@ -2,7 +2,7 @@ import pokemon
 
 #All pokemon and moves are defined here.
 
-# 	def __init__(self, name, attribute1, attribute2, status, hp, attack, \
+# def __init__(self, name, attribute1, attribute2, status, hp, attack, \
 #		defense, spAttack, spDefense, speed, moves):
 # def __init__(self, name, attribute, damage, effect, phys, acc, PP):
 
@@ -46,3 +46,48 @@ pokemon.Pokemon('Magnezone', 'Electric', 'Steel', 177, 70, 94, 130, 130, 60, all
 pokemon.Pokemon('Eelektross', 'Electric', None, 192, 115, 81, 168, 80, 50, allMoves[16:20]),
 pokemon.Pokemon('Virizion', 'Grass', 'Fighting', 152, 153, 72, 90, 129, 171, allMoves[20:24])
 ]
+
+# Hippowdon @ Leftovers 
+# Trait: Sand Stream 
+# EVs: 252 HP / 252 Def / 4 SDef 
+# Impish Nature 
+# - Earthquake 
+# - Slack Off 
+# - Stealth Rock 
+# - Ice Fang 
+
+# Mamoswine @ Life Orb 
+# Trait: Snow Cloak 
+# EVs: 4 HP / 252 Atk / 252 Spd 
+# Adamant Nature 
+# - Ice Shard 
+# - Icicle Crash 
+# - Earthquake 
+# - Stone Edge 
+
+# Zoroark @ Life Orb 
+# Trait: 
+# EVs: 4 Atk / 252 SAtk / 252 Spd 
+# Naive Nature 
+# - Night Burst 
+# - Hidden Power [Ice] 
+# - Focus Blast 
+# - Sucker Punch 
+
+# Escavalier @ Choice Band 
+# Trait: Shell Armor 
+# EVs: 248 HP / 252 Atk / 4 SDef / 4 Spd 
+# Adamant Nature 
+# - Megahorn 
+# - Pursuit 
+# - Return 
+# - Knock Off 
+
+# Tornadus @ Life Orb 
+# Trait: Prankster 
+# EVs: 4 Atk / 252 SAtk / 252 Spd 
+# Naive Nature 
+# - Hurricane 
+# - Hammer Arm 
+# - Rain Dance 
+# - Taunt 
