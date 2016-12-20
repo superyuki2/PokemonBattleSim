@@ -2,10 +2,6 @@ import pokemon
 
 #All pokemon and moves are defined here.
 
-# def __init__(self, name, attribute1, attribute2, status, hp, attack, \
-#		defense, spAttack, spDefense, speed, moves):
-# def __init__(self, name, attribute, damage, effect, phys, acc, PP):
-
 allMoves = [pokemon.Move('Draco Meteor', 'Dragon', 130, True, False, 90, 5),
 pokemon.Move('Fire Blast', 'Fire', 110, True, False, 85, 5),
 pokemon.Move('Superpower', 'Fighting', 120, True, True, 100, 5),
@@ -36,8 +32,9 @@ pokemon.Move('Close Combat', 'Fighting', 120, True, True, 100, 5),
 pokemon.Move('Stone Edge', 'Rock', 100, True, True, 80, 5),
 pokemon.Move('Leaf Blade', 'Grass', 90, True, True, 100, 15),
 
-
 ]
+
+# def __init__(self, name, attribute, damage, effect, phys, acc, PP):
 
 allPokemon = [pokemon.Pokemon('Dragonite', 'Dragon', 'Flying', 151, 197, 95, 163, 100, 81, allMoves[0:4]),
 pokemon.Pokemon('Dusclops', 'Ghost', None, 147, 70, 150, 60, 174, 26, allMoves[4:8]),
@@ -45,7 +42,11 @@ pokemon.Pokemon('Roserade', 'Grass', 'Poison', 167, 70, 95, 125, 139, 90, allMov
 pokemon.Pokemon('Magnezone', 'Electric', 'Steel', 177, 70, 94, 130, 130, 60, allMoves[12:16]),
 pokemon.Pokemon('Eelektross', 'Electric', None, 192, 115, 81, 168, 80, 50, allMoves[16:20]),
 pokemon.Pokemon('Virizion', 'Grass', 'Fighting', 152, 153, 72, 90, 129, 171, allMoves[20:24])
+
 ]
+
+# def __init__(self, name, attribute1, attribute2, status, hp, attack, \
+#		defense, spAttack, spDefense, speed, moves):
 
 # Hippowdon @ Leftovers 
 # Trait: Sand Stream 
@@ -73,15 +74,6 @@ pokemon.Pokemon('Virizion', 'Grass', 'Fighting', 152, 153, 72, 90, 129, 171, all
 # - Hidden Power [Ice] 
 # - Focus Blast 
 # - Sucker Punch 
-
-# Escavalier @ Choice Band 
-# Trait: Shell Armor 
-# EVs: 248 HP / 252 Atk / 4 SDef / 4 Spd 
-# Adamant Nature 
-# - Megahorn 
-# - Pursuit 
-# - Return 
-# - Knock Off 
 
 # Tornadus @ Life Orb 
 # Trait: Prankster 

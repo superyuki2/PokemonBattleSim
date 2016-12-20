@@ -13,7 +13,7 @@ class Player:
 		self.reflect = False #Reflect
 		self.screen = False #Light Screen
 		self.weather = None #Current weather
-		
+
 
 ######Global methods for actual gameplay######
 
@@ -23,7 +23,7 @@ def choosePokeRandom(player):
 	for i in six:
 		player.pokemonSet.append(copy.deepcopy(pokeAndmoves.allPokemon[i]))
 
-#Show the 6 Pokemon chosen, and prompts user to choose starting Pokemon.
+#Shows the 6 Pokemon chosen, and prompts user to choose starting Pokemon.
 def beginningPrompt(player, opponent):
 	print("The following are the Pokemon that have been chosen.")
 	for i in range(len(player.pokemonSet)):
@@ -43,6 +43,77 @@ def beginningPrompt(player, opponent):
 	opponent.curPoke = opponent.pokemonSet[random.randint(0, 5)]
 	print(player.curPoke.name + ", I choose you!")
 	print("Your opponent's first Pokemon is " + opponent.curPoke.name + "!")
+
+#Called in the beginning of every turn. Shows basic stats and all options.
+def everyTurn(player, opp, p1, p2):
+	print("")
+	print("Your current Pokemon: " + p1.name + " HP: " + str(p1.hp) + "/" + str(p1.basehp) + " Status: " + str(p1.status))
+	print("Opponent Pokemon: " + p2.name + " HP: " + str(p2.hp) + "/" + str(p2.basehp) + " Status: " + str(p2.status))
+	print("Current weather: " + str(player.weather))
+	print("What would you like to do? (0 - 5)")
+	for i in range(len(p1.moves)):
+		print(p1.moves[i].name + ": " + str(i))
+	print("Switch Pokemon: 4")
+	print("See Pokemon stats: 5")
+
+#Asks player to choose an option.
+def playerChoice(player, opp):
+	goodInput = False
+	while not goodInput:
+		try:
+			everyTurn(player, opp, player.curPoke, opp.curPoke)
+			choice = int(raw_input())
+			if (choice < 0 or choice > 5):
+				print("Please enter a valid number (0 - 5).")
+				continue
+			#Use Move
+			elif choice in [0, 1, 2, 3]:
+				goodInput = True
+			#Switch Pokemon
+			elif choice == 4:
+				goodInput = True
+			#Show stat
+			elif choice == 5:
+				showStats(player.curPoke)
+				continue
+		except ValueError: 
+			print("Please enter a valid number (0 - 5).")
+			continue
+	return choice
+
+#Prompts player to choose which Pokemon to switch to. Returns the Pokemon index, or 6 for cancel. 
+def switchPokemon(player):
+	goodInput = False
+	switchPokeList = []
+	for i in range(0, len(player.pokemonSet)):
+		if player.pokemonSet[i] != player.curPoke:
+			switchPokeList.append(i)
+	while not goodInput:
+		try:
+			print("Please choose which Pokemon to switch in (0 - 5), or cancel (6).")
+			for i in switchPokeList:
+				print(player.pokemonSet[i].name + ": " + str(i))
+			print("Cancel: 6") 
+			switchPoke = int(raw_input())
+			if (switchPoke not in switchPokeList) and switchPoke != 6:
+				print("Please enter a valid number (0 - 6).")
+				continue
+			goodInput = True
+		except ValueError: 
+			print("Please enter a valid number (0 - 6).")
+			continue
+	return switchPoke
+
+#Shows all other basic stats of a Pokemon.
+def showStats(p):
+	print("")
+	print("Stats of " + p.name)
+	print("Types: " + str(p.attribute1) + ", " + str(p.attribute2))
+	print("Attack: " + str(p.attack))
+	print("Defense: " + str(p.defense))
+	print("SpAttack: " + str(p.spAttack))
+	print("SpDefense: " + str(p.spDefense))
+	print("Speed: " + str(p.speed))
 
 #Handles cases where move is ineffective against the opponent Pokemon. If effective, return False.
 #Takes the type of the move and attribute of the receiving Pokemon as arguments. 
@@ -151,7 +222,7 @@ def typeRelation(m, a):
 #Checks if all 6 Pokemon have fainted. If so, returns the losing player.
 def gameOver(player):
 	for poke in player.pokemonSet:
-		if poke.hp != 0:
+		if poke.hp > 0:
 			return False
 	return player
 
@@ -186,26 +257,30 @@ def main():
 
 	#Handles beginning where starter Pokemon are chosen. 
 	beginningPrompt(player, opponent)
-	### Player chooses which Pokemon to start with. Opponent can be random -> curPoke are set. ###
 
-	# Beginning of every turn, print the following:
-	# 	Pokemon names, HP, status
-	# 	Options 1-4 along with name of each move
-	# 	Option 5, which is for replacing Pokemon. Then, print 5 other Pokemon along w/ HP
-	# 	Option 6 can be printing all other stats of the curPoke
-	# Both players choose a move, and order does not matter for either.
+	#Game starts
+	playing = True
+	while playing:
+		#Ask for choice of player. Also includes everyTurn method
+		choice = playerChoice(player, opponent)
 
-	#Testing
-	# p1 = player.curPoke
-	# p2 = opponent.curPoke
+		#Pokemon switch option
+		if choice == 4:
+			switchPoke = switchPokemon(player)
+			#Cancelled, back to playerChoice()
+			if switchPoke == 6:
+				continue
+			#Switch Pokemon
+			else:
+				player.curPoke = player.pokemonSet[switchPoke]
+		#Move option
+		elif choice in [0, 1, 2, 3]:
+			pMove = player.curPoke.moves[choice]
 
-	# print(player.curPoke.name)
-	# print(opponent.curPoke.name)
+		#Opponent choose a move. Random for now.
+		oMove = opponent.curPoke.moves[random.randint(0, len(opponent.curPoke.moves))]
 
-	# print(damageCalculation(player, opponent, p1, p2, p1.moves[0]))
-
-
-
+		playing = False
 
 
 if __name__ == "__main__":

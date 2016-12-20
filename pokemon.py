@@ -27,6 +27,7 @@ class Pokemon:
 		#Booleans
 		self.sub = False #Substitute existence
 		self.protect = False #Protect
+		self.taunt = False #Taunt
 
 #The Move Class
 class Move:
