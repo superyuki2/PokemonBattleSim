@@ -21,6 +21,7 @@ class Pokemon:
 		self.spAttack = spAttack
 		self.spDefense = spDefense
 		self.speed = speed
+		self.accuracy = 1
 
 		self.moves = moves #set of moves, length 4 Move array
 		#self.items = items mmmm maybe later
@@ -31,7 +32,7 @@ class Pokemon:
 
 #The Move Class
 class Move:
-	def __init__(self, name, attribute, damage, effect, phys, acc, pp):
+	def __init__(self, name, attribute, damage, phys, acc, pp):
 		#Strings
 		self.name = name
 		self.attribute = attribute
@@ -40,5 +41,4 @@ class Move:
 		self.acc = acc
 		self.pp = pp
 		#Boolean
-		self.effect = effect
 		self.phys = phys #physical attack - True, special attack - False, neither - None

@@ -8,11 +8,12 @@ class Player:
 	def __init__(self):
 		self.pokemonSet = [] #All Pokemon
 		self.curPoke = None #Current Pokemon
-		self.spikes = False #Spikes
-		self.poisonSpikes = False #Poison Spikes
+		self.stealthRock = False #Stealth Rock
 		self.reflect = False #Reflect
 		self.screen = False #Light Screen
 		self.weather = None #Current weather
+		self.spikes = 0 #Spikes
+		self.poisonSpikes = 0 #Poison Spikes
 
 
 ######Global methods for actual gameplay######
@@ -86,7 +87,7 @@ def switchPokemon(player):
 	goodInput = False
 	switchPokeList = []
 	for i in range(0, len(player.pokemonSet)):
-		if player.pokemonSet[i] != player.curPoke:
+		if player.pokemonSet[i] != player.curPoke and player.pokemonSet[i].hp > 0:
 			switchPokeList.append(i)
 	while not goodInput:
 		try:
@@ -103,6 +104,21 @@ def switchPokemon(player):
 			print("Please enter a valid number (0 - 6).")
 			continue
 	return switchPoke
+
+#Checks for conditions that should be checked after every switch.
+def switchCheck(p, o):
+	return None
+
+#Makes a move given player, opponent, and the chosen moves of both.
+def makeMove(p, o, pM, oM):
+	return None
+
+#Checks for conditions that should be checked at the end of each turn.
+def turnEndCheck():
+	#weatherCheck
+	#statusCheck
+	return None
+
 
 #Shows all other basic stats of a Pokemon.
 def showStats(p):
@@ -230,7 +246,6 @@ def gameOver(player):
 #opponent's Pokemon, and the move used. Also, critical hit is not accounted for in this damage calculation.
 def damageCalculation(user, receiver, pokeP, pokeO, move):
 	typeEffect = typeRelation(move.attribute, pokeO.attribute1) * typeRelation(move.attribute, pokeO.attribute2)
-	print(typeEffect)
 	if move.phys:
 		a = pokeP.attack
 		d = pokeO.defense
@@ -272,13 +287,18 @@ def main():
 				continue
 			#Switch Pokemon
 			else:
+				print("Come back, " + player.curPoke.name + "!")
 				player.curPoke = player.pokemonSet[switchPoke]
+				print(player.curPoke.name + ", I choose you!")
+				#switchCheck(player, opponent)
 		#Move option
-		elif choice in [0, 1, 2, 3]:
+		pMove = None
+		if choice in [0, 1, 2, 3]:
 			pMove = player.curPoke.moves[choice]
 
 		#Opponent choose a move. Random for now.
 		oMove = opponent.curPoke.moves[random.randint(0, len(opponent.curPoke.moves))]
+		#makeMove(player, opponent, pMove, oMove). 
 
 		playing = False
 
