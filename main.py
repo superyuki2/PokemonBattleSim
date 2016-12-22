@@ -3,6 +3,7 @@ import copy
 import random
 import pokeAndmoves
 import pokemon
+import staticMethods as sm
 
 class Player: 
 	def __init__(self):
@@ -13,10 +14,12 @@ class Player:
 		self.screen = False #Light Screen
 		self.weather = None #Current weather
 		self.spikes = 0 #Spikes
-		self.poisonSpikes = 0 #Poison Spikes
+		self.toxicSpikes = 0 #Poison Spikes
 
 
 ######Global methods for actual gameplay######
+
+### Functions for beginning the game, before any acutal game play. ###
 
 #Chooses 6 random numbers for initial Pokemon selection.
 def choosePokeRandom(player):
@@ -75,15 +78,15 @@ def playerChoice(player, opp):
 				goodInput = True
 			#Show stat
 			elif choice == 5:
-				showStats(player.curPoke)
+				sm.showStats(player.curPoke)
 				continue
 		except ValueError: 
 			print("Please enter a valid number (0 - 5).")
 			continue
 	return choice
 
-#Prompts player to choose which Pokemon to switch to. Returns the Pokemon index, or 6 for cancel. 
-def switchPokemon(player):
+#Prompts player to choose which Pokemon to switch to. Returns the Pokemon index.
+def switchChoice(player):
 	goodInput = False
 	switchPokeList = []
 	for i in range(0, len(player.pokemonSet)):
@@ -91,149 +94,63 @@ def switchPokemon(player):
 			switchPokeList.append(i)
 	while not goodInput:
 		try:
-			print("Please choose which Pokemon to switch in (0 - 5), or cancel (6).")
+			print("Please choose which Pokemon to switch in (0 - 5).")
 			for i in switchPokeList:
 				print(player.pokemonSet[i].name + ": " + str(i))
-			print("Cancel: 6") 
-			switchPoke = int(raw_input())
-			if (switchPoke not in switchPokeList) and switchPoke != 6:
-				print("Please enter a valid number (0 - 6).")
+ 			switchPoke = int(raw_input())
+			if switchPoke not in switchPokeList:
+				print("Please enter a valid number (0 - 5).")
 				continue
 			goodInput = True
 		except ValueError: 
-			print("Please enter a valid number (0 - 6).")
+			print("Please enter a valid number (0 - 5).")
 			continue
 	return switchPoke
 
+#Called when a Pokemon is switched in, whether it be after a switch option
+#or after a Pokemon faints. 
+def switchPokemon(p, switchPoke):
+	print("Come back, " + p.curPoke.name + "!")
+	p.curPoke = p.pokemonSet[switchPoke]
+	print(p.curPoke.name + ", I choose you!")
+
 #Checks for conditions that should be checked after every switch.
 def switchCheck(p, o):
-	return None
+	if p.stealthRock:
+		p.curPoke.hp -= (int(p.curPoke.basehp/8 * sm.typeRelation('Rock', p.curPoke.attribute1) * 
+			sm.typeRelation('Rock', p.curPoke.attribute2)))
+		print("Stealth Rock gave damage to " + p.curPoke.name + "!")
+		if faintCheck(p.curPoke):
+			return
+	if p.spikes:
+		if not (sm.isIneffective('Ground', p.curPoke.attribute1) or sm.isIneffective('Ground', p.curPoke.attribute2)):
+			p.curPoke.hp -= int(p.curPoke.basehp/8 * p.spikes)
+			print("Spikes gave damage to " + p.curPoke.name + "!")
+			if faintCheck(p.curPoke):
+				return
+	if (p.toxicSpikes) and p.curPoke.status == None:
+		if not ((p.curPoke.attribute1 in ['Flying', 'Poison', 'Steel']) or (p.curPoke.attribute2 in ['Flying', 'Poison', 'Steel'])):
+			if p.toxicSpikes == 1:
+				p.curPoke.status = 'Poison'
+			elif p.toxicSpikes == 2:
+				p.curPoke.status = 'Toxic'
+			print("Toxic spikes dug into " + p.curPoke.name + "!")
 
 #Makes a move given player, opponent, and the chosen moves of both.
 def makeMove(p, o, pM, oM):
 	return None
 
-#Checks for conditions that should be checked at the end of each turn.
-def turnEndCheck():
-	#weatherCheck
-	#statusCheck
-	return None
-
-
-#Shows all other basic stats of a Pokemon.
-def showStats(p):
-	print("")
-	print("Stats of " + p.name)
-	print("Types: " + str(p.attribute1) + ", " + str(p.attribute2))
-	print("Attack: " + str(p.attack))
-	print("Defense: " + str(p.defense))
-	print("SpAttack: " + str(p.spAttack))
-	print("SpDefense: " + str(p.spDefense))
-	print("Speed: " + str(p.speed))
-
-#Handles cases where move is ineffective against the opponent Pokemon. If effective, return False.
-#Takes the type of the move and attribute of the receiving Pokemon as arguments. 
-def isIneffective(m, a):
-	if ((m == 'Normal' and a == 'Ghost') or (m == 'Electric' and a == 'Ground')
-		or (m == 'Fighting' and a == 'Ghost') or (m == 'Poison' and a == 'Steel')
-		or (m == 'Ground' and a == 'Flying') or (m == 'Psychic' and a == 'Dark')
-		or (m == 'Ghost' and a == 'Normal') or (m == 'Dragon' and a == 'Fairy')):
+#Checks if the Pokemon has fainted, updates Pokemon hp to 0 if it becomes negative.
+def faintCheck(p):
+	if p.hp <= 0:
+		p.hp = 0
+		print(p.name + " has fainted!")
 		return True
 	return False
 
-#Handles all type relations and returns the multiplier value. Same args as isIneffective(). 
-def typeRelation(m, a):
-	if m == 'Normal':
-		if a == 'Rock' or a == 'Steel':
-			return 0.5
-	elif m == 'Fire':
-		if a == 'Water' or a == 'Rock' or a == 'Fire' or a == 'Dragon':
-			return 0.5
-		elif a == 'Grass' or a == 'Ice' or a == 'Steel' or a == 'Bug':
-			return 2.0
-	elif m == 'Water':
-		if a == 'Water' or a == 'Dragon' or a == 'Grass':
-			return 0.5
-		elif a == 'Rock' or a == 'Ground' or a == 'Fire':
-			return 2.0
-	elif m == 'Electric':
-		if a == 'Grass' or a == 'Electric' or a == 'Dragon':
-			return 0.5
-		elif a == 'Water' or a == 'Flying':
-			return 2.0
-	elif m == 'Grass':
-		if (a == 'Grass' or a == 'Fire' or a == 'Dragon' or a == 'Flying' or a == 'Poison'
-		or a == 'Steel' or a == 'Bug'):
-			return 0.5
-		elif a == 'Water' or a == 'Rock' or a == 'Ground':
-			return 2.0
-	elif m == 'Ice':
-		if a == 'Fire' or a == 'Water' or a == 'Steel' or a == 'Ice':
-			return 0.5
-		elif a == 'Ground' or a == 'Dragon' or a == 'Grass' or a == 'Flying':
-			return 2.0
-	elif m == 'Fighting':
-		if a == 'Flying' or a == 'Poison' or a == 'Psychic' or a == 'Fairy' or a == 'Bug':
-			return 0.5
-		elif a == 'Normal' or a == 'Ice' or a == 'Rock' or a == 'Dark' or a == 'Steel':
-			return 2.0
-	elif m == 'Poison':
-		if a == 'Poison' or a == 'Ground' or a == 'Rock' or a == 'Ghost':
-			return 0.5
-		elif a == 'Grass' or a == 'Fairy':
-			return 2.0
-	elif m == 'Ground':
-		if a == 'Grass' or a == 'Bug':
-			return 0.5
-		elif a == 'Rock' or a == 'Poison' or a == 'Steel' or a == 'Fire' or a == 'Electric':
-			return 2.0
-	elif m == 'Flying':
-		if a == 'Rock' or a == 'Electric' or a == 'Steel':
-			return 0.5
-		elif a == 'Grass' or a == 'Fighting' or a == 'Bug':
-			return 2.0
-	elif m == 'Psychic':
-		if a == 'Psychic' or a == 'Steel':
-			return 0.5
-		elif a == 'Fighting' or a == 'Poison':
-			return 2.0
-	elif m == 'Bug':
-		if (a == 'Fire' or a == 'Fighting' or a == 'Poison' or a == 'Flying' 
-		or a == 'Fairy' or a == 'Ghost' or a == 'Steel'):
-			return 0.5
-		elif a == 'Grass' or a == 'Psychic' or a == 'Dark':
-			return 2.0
-	elif m == 'Rock':
-		if a == 'Ground' or a == 'Fighting' or a == 'Steel':
-			return 0.5
-		elif a == 'Flying' or a == 'Fire' or a == 'Ice' or a == 'Bug':
-			return 2.0
-	elif m == 'Ghost':
-		if a == 'Dark':
-			return 0.5
-		elif a == 'Psychic' or a == 'Ghost':
-			return 2.0
-	elif m == 'Dragon':
-		if a == 'Steel':
-			return 0.5
-		elif a == 'Dragon':
-			return 2.0
-	elif m == 'Dark':
-		if a == 'Dark' or a == 'Fighting' or a == 'Fairy':
-			return 0.5
-		elif a == 'Psychic' or a == 'Ghost':
-			return 2.0
-	elif m == 'Steel':
-		if a == 'Steel' or a == 'Fire' or a == 'Electric' or a == 'Water':
-			return 0.5
-		elif a == 'Rock' or a == 'Ice' or a == 'Fairy':
-			return 2.0
-	elif m == 'Fairy':
-		if a == 'Fire' or a == 'Poison' or a == 'Steel':
-			return 0.5
-		elif a == 'Fighting' or a == 'Dark' or a == 'Dragon':
-			return 2.0
-	return 1.0
+#Called when a pokemon faints. 
+def afterFaint():
+	return None
 
 #Checks if all 6 Pokemon have fainted. If so, returns the losing player.
 def gameOver(player):
@@ -245,7 +162,7 @@ def gameOver(player):
 #Calculates the damage (int) given user field status, opponent field status, player's Pokemon, 
 #opponent's Pokemon, and the move used. Also, critical hit is not accounted for in this damage calculation.
 def damageCalculation(user, receiver, pokeP, pokeO, move):
-	typeEffect = typeRelation(move.attribute, pokeO.attribute1) * typeRelation(move.attribute, pokeO.attribute2)
+	typeEffect = sm.typeRelation(move.attribute, pokeO.attribute1) * sm.typeRelation(move.attribute, pokeO.attribute2)
 	if move.phys:
 		a = pokeP.attack
 		d = pokeO.defense
@@ -260,6 +177,33 @@ def damageCalculation(user, receiver, pokeP, pokeO, move):
 	mod = stab * typeEffect * random.uniform(0.85, 1.00)
 	totalDamage = int(nonMod * mod)
 	return totalDamage
+
+### Turn End Checks ###
+
+#Checks for conditions that should be checked at the end of each turn.
+def turnEndCheck(p, o):
+	weatherDamageCheck(p, o)
+	#statusDamageCheck
+	return None
+
+#Checks for weather, called at the end of every turn.
+def weatherDamageCheck(p, o):
+	if p.weather:
+		if p.weather == 'Hail':
+			if not (p.curPoke.attribute1 == 'Ice' or p.curPoke.attribute2 == 'Ice'):
+				p.curPoke.hp -= int(p.curPoke.basehp/16)
+			if not (o.curPoke.attribute1 == 'Ice' or o.curPoke.attribute2 == 'Ice'):
+				o.curPoke.hp -= int(o.curPoke.basehp/16)
+		elif p.weather == 'Sandstorm':
+			if not (p.curPoke.attribute1 in ['Rock', 'Ground', 'Steel'] or p.curPoke.attribute2 in ['Rock', 'Ground', 'Steel']):
+				p.curPoke.hp -= int(p.curPoke.basehp/16)
+			if not (o.curPoke.attribute1 in ['Rock', 'Ground', 'Steel'] or o.curPoke.attribute2 in ['Rock', 'Ground', 'Steel']):
+				o.curPoke.hp -= int(o.curPoke.basehp/16)
+
+
+#Checks for status, called at the end of every turn.
+def statusDamageCheck(p, o):
+	return None
 
 
 def main():
@@ -281,23 +225,16 @@ def main():
 
 		#Pokemon switch option
 		if choice == 4:
-			switchPoke = switchPokemon(player)
-			#Cancelled, back to playerChoice()
-			if switchPoke == 6:
-				continue
-			#Switch Pokemon
-			else:
-				print("Come back, " + player.curPoke.name + "!")
-				player.curPoke = player.pokemonSet[switchPoke]
-				print(player.curPoke.name + ", I choose you!")
-				#switchCheck(player, opponent)
+			switchPoke = switchChoice(player)
+			switchPokemon(player, switchPoke)
+			switchCheck(player, opponent)
 		#Move option
 		pMove = None
 		if choice in [0, 1, 2, 3]:
 			pMove = player.curPoke.moves[choice]
 
 		#Opponent choose a move. Random for now.
-		oMove = opponent.curPoke.moves[random.randint(0, len(opponent.curPoke.moves))]
+		oMove = opponent.curPoke.moves[random.randint(0, len(opponent.curPoke.moves) - 1)]
 		#makeMove(player, opponent, pMove, oMove). 
 
 		playing = False
