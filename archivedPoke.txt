@@ -1,0 +1,143 @@
+# Dragonite @ Life Orb 
+# Trait: Inner Focus 
+# EVs: 252 Atk / 252 SAtk / 4 Spd 
+# Rash Nature 
+# - Draco Meteor 
+# - Fire Blast 
+# - Superpower 
+# - ExtremeSpeed 
+
+# Dusclops @ Eviolite 
+# Trait: 
+# EVs: 252 HP / 80 Def / 176 SDef 
+# Calm Nature 
+# - Pain Split 
+# - Will-O-Wisp 
+# - Night Shade 
+# - Confuse Ray 
+
+# Roserade @ Leftovers 
+# Trait: Natural Cure 
+# EVs: 252 HP / 120 Def / 136 SDef 
+# Calm Nature 
+# - Spikes 
+# - Giga Drain 
+# - Hidden Power [Fire] 
+# - Rest 
+
+# Magnezone @ Light Clay 
+# Trait: Magnet Pull 
+# EVs: 252 HP / 96 Def / 162 SDef 
+# Calm Nature 
+# - Light Screen 
+# - Reflect 
+# - Hidden Power [Fire] 
+# - Volt Change 
+
+# Eelektross @ Leftovers 
+# Trait: 
+# EVs: 252 HP / 4 Def / 252 SAtk 
+# Quiet Nature 
+# - Substitute 
+# - Thunder Wave 
+# - Acid Bomb 
+# - U-turn 
+
+# Virizion @ Life Orb 
+# Trait: 
+# EVs: 4 HP / 252 Atk / 252 Spd 
+# Jolly Nature 
+# - Swords Dance 
+# - Close Combat 
+# - Stone Edge 
+# - Leaf Blade
+
+# Hippowdon @ Leftovers 
+# Trait: Sand Stream 
+# EVs: 252 HP / 252 Def / 4 SDef 
+# Impish Nature 
+# - Earthquake 
+# - Slack Off 
+# - Stealth Rock 
+# - Ice Fang 
+
+# Mamoswine @ Life Orb 
+# Trait: Snow Cloak 
+# EVs: 4 HP / 252 Atk / 252 Spd 
+# Adamant Nature 
+# - Ice Shard 
+# - Icicle Crash 
+# - Earthquake 
+# - Stone Edge 
+
+# Zoroark @ Life Orb 
+# Trait: 
+# EVs: 4 Atk / 252 SAtk / 252 Spd 
+# Naive Nature 
+# - Night Burst 
+# - Hidden Power [Ice] 
+# - Focus Blast 
+# - Sucker Punch 
+
+# Tornadus @ Life Orb 
+# Trait: Prankster 
+# EVs: 4 Atk / 252 SAtk / 252 Spd 
+# Naive Nature 
+# - Hurricane 
+# - Hammer Arm 
+# - Rain Dance 
+# - Taunt 
+
+# Nidoqueen @ Leftovers 
+# Trait: Sheer Force 
+# EVs: 252 HP / 252 Def / 4 SDef 
+# Bold Nature 
+# - Toxic Spikes 
+# - Earth Power 
+# - Flamethrower 
+# - Ice Beam 
+
+# Slowbro @ Choice Specs 
+# Trait: Regenerator 
+# EVs: 252 HP / 4 Def / 252 SAtk 
+# Modest Nature 
+# - Surf 
+# - Fire Blast 
+# - Psychic 
+# - Grass Knot 
+
+# Snorlax @ Leftovers 
+# Trait: Thick Fat 
+# EVs: 188 HP / 104 Def / 216 SDef 
+# Careful Nature 
+# - Curse 
+# - Return 
+# - Fire Punch 
+# - Rest 
+
+# Heracross @ Toxic Orb 
+# Trait: Guts 
+# EVs: 16 HP / 240 Atk / 252 Spd 
+# Adamant Nature 
+# - Megahorn 
+# - Close Combat 
+# - Stone Edge 
+# - Facade 
+
+# Lucario @ Choice Band 
+# Trait: Inner Focus 
+# EVs: 4 HP / 252 Atk / 252 Spd 
+# Adamant Nature 
+# - Close Combat 
+# - ExtremeSpeed 
+# - Crunch 
+# - Ice Punch 
+
+# Bisharp @ Life Orb 
+# Trait: Defiant 
+# EVs: 252 HP / 252 Atk / 4 Def 
+# Adamant Nature 
+# - Swords Dance 
+# - Sucker Punch 
+# - Substitute 
+# - Brick Break 
