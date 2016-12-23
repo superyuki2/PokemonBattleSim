@@ -7,6 +7,7 @@ class Pokemon:
 		self.attribute1 = attribute1
 		self.attribute2 = attribute2
 		self.status = None
+		self.toxicCount = 0
 		#base stats, ints
 		self.basehp = hp
 		self.baseattack = attack
@@ -26,6 +27,7 @@ class Pokemon:
 		self.moves = moves #set of moves, length 4 Move array
 		#self.items = items mmmm maybe later
 		#Booleans
+		self.confused = False #Confused status
 		self.sub = False #Substitute existence
 		self.protect = False #Protect
 		self.taunt = False #Taunt

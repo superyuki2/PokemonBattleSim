@@ -178,4 +178,111 @@ pokemon.Pokemon('Bisharp', 'Dark', 'Steel', 172, 188, 101, 60, 70, 70, allMoves[
 # def __init__(self, name, attribute1, attribute2, hp, attack, \
 #		defense, spAttack, spDefense, speed, moves):
 
+# Starmie @ Leftovers 
+# Trait: Natural Cure 
+# EVs: 4 HP / 252 SAtk / 252 Spd 
+# Timid Nature 
+# - Rapid Spin 
+# - Surf 
+# - Thunderbolt 
+# - Recover 
+
+# Jirachi @ Leftovers 
+# Trait: 
+# EVs: 80 HP / 252 Atk / 176 Spd 
+# Jolly Nature 
+# - Substitute 
+# - Body Slam 
+# - Iron Head 
+# - Fire Punch 
+
+# Gastrodon @ Choice Specs 
+# Trait: Storm Drain 
+# EVs: 240 HP / 252 SAtk / 16 SDef 
+# Modest Nature 
+# - Surf 
+# - Earth Power 
+# - Ice Beam 
+# - Recover 
+
+# Ferrothorn @ Choice Band 
+# Trait: 
+# EVs: 248 HP / 252 Atk / 8 SDefef 
+# Brave Nature 
+# - Gyro Ball 
+# - Power Whip 
+# - Bulldoze 
+# - Spikes 
+
+# Mienshao @ Life Orb 
+# Trait: Regenerator 
+# EVs: 252 Atk / 4 SAtk / 252 Spd 
+# Naive Nature 
+# - Hi Jump Kick 
+# - U-turn 
+# - Hidden Power [Ice] 
+# - Fake Out 
+
+# Bouffalant @ Choice Band 
+# Trait: Reckless 
+# EVs: 252 HP / 252 Atk / 4 Def 
+# Adamant Nature 
+# - Head Charge 
+# - Wild Charge 
+# - Earthquake 
+# - Payback 
+
+# Toxicroak @ Leftovers 
+# Trait: Dry Skin 
+# EVs: 244 HP / 252 Atk / 12 Def 
+# Adamant Nature 
+# - Bulk Up 
+# - Substitute 
+# - Drain Punch 
+# - Payback 
+
+# Gallade @ Life Orb 
+# Trait: 
+# EVs: 4 HP / 252 Atk / 252 Spd 
+# Adamant Nature 
+# - Swords Dance 
+# - Close Combat 
+# - Ice Punch 
+# - Shadow Sneak 
+
+# Uxie @ Light Clay 
+# Trait: 
+# EVs: 252 HP / 252 Def / 4 SDef 
+# Impish Nature 
+# - Reflect 
+# - Light Screen 
+# - Memento 
+# - U-turn 
+
+# Scrafty @ Leftovers 
+# Trait: Shed Skin 
+# EVs: 252 HP / 8 Atk / 248 SDef 
+# Careful Nature 
+# - Bulk Up 
+# - Drain Punch 
+# - Crunch 
+# - Rest 
+
+# Accelgor @ Life Orb 
+# Trait: Sticky Hold 
+# EVs: 4 HP / 252 SAtk / 252 Spd 
+# Timid Nature 
+# - Bug Buzz 
+# - Focus Blast 
+# - Giga Drain 
+# - Hidden Power [Ice] 
+
+# Terrakion @ Choice Band 
+# Trait: 
+# EVs: 4 HP / 252 Atk / 252 Spd 
+# Jolly Nature 
+# - Close Combat 
+# - Stone Edge 
+# - X-Scissor 
+# - Earthquake 
 

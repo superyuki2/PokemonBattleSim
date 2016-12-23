@@ -1,3 +1,5 @@
+##### All methods that don't change variables. #####
+
 #Shows all other basic stats of a Pokemon.
 def showStats(p):
 	print("")
@@ -113,4 +115,3 @@ def typeRelation(m, a):
 			return 2.0
 	return 1.0
 
-	
