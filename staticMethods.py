@@ -115,3 +115,37 @@ def typeRelation(m, a):
 			return 2.0
 	return 1.0
 
+#Calculates the damage (int) given user field status, opponent field status, player's Pokemon, 
+#opponent's Pokemon, and the move used. Also, critical hit is not accounted for in this damage calculation.
+def damageCalculation(p, o, pokeP, pokeO, move):
+	typeEffect = typeRelation(move.attribute, pokeO.attribute1) * typeRelation(move.attribute, pokeO.attribute2)
+	if move.phys:
+		a = pokeP.attack
+		d = pokeO.defense
+	elif move.phys == False:
+		a = pokeP.spAttack
+		d = pokeO.spDefense
+	if move.attribute == pokeP.attribute1 or move.attribute == pokeP.attribute2:
+		stab = 1.5
+	else:
+		stab = 1
+	#Weather and status effects on damage taken into account.
+	extra = 1
+	if p.weather == 'Rain':
+		if move.attribute == 'Fire':
+			extra = extra / 2
+		elif move.attribute == 'Water':
+			extra = extra * 2
+	if p.weather == 'Hail' and move.attribute == 'Ice':
+		extra = extra * 2
+	if pokeP.status == 'Burn' and move.phys:
+		a = a / 2
+	if (o.reflect and move.phys) or (o.screen and (not move.phys)):
+		a = a / 2
+
+	nonMod = (0.44 * (a/d) * move.damage) + 2
+	mod = stab * typeEffect * extra * random.uniform(0.85, 1.00)
+	totalDamage = int(nonMod * mod)
+	return totalDamage
+
+

@@ -4,14 +4,15 @@ import random
 import pokeAndmoves
 import pokemon
 import staticMethods as sm
+import moveEffects as me
 
 class Player: 
 	def __init__(self, human):
 		self.pokemonSet = [] #All Pokemon
 		self.curPoke = None #Current Pokemon
 		self.stealthRock = False #Stealth Rock
-		self.reflect = False #Reflect
-		self.screen = False #Light Screen
+		self.reflect = 0 #Reflect
+		self.screen = 0 #Light Screen
 		self.weather = None #Current weather
 		self.spikes = 0 #Spikes
 		self.toxicSpikes = 0 #Poison Spikes
@@ -75,7 +76,11 @@ def playerChoice(player, opp):
 				continue
 			#Use Move
 			elif choice in [0, 1, 2, 3]:
-				goodInput = True
+				if player.curPoke.moves[choice].damage > 0 and player.curPoke.taunt:
+					print(player.curPoke.name + "has been taunted and can not attack!")
+					continue
+				else: 
+					goodInput = True
 			#Switch Pokemon
 			elif choice == 4:
 				goodInput = True
@@ -99,6 +104,7 @@ def switchPokemon(player):
 			if player.pokemonSet[i] != player.curPoke and player.pokemonSet[i].hp > 0:
 				switchPokeList.append(i)
 		switchPoke = random.choice(switchPokeList)
+		switchReset(player)
 		player.curPoke = player.pokemonSet[switchPoke]
 		print("The opponent chose " + player.curPoke.name + "!")
 	#for main player
@@ -119,6 +125,7 @@ def switchPokemon(player):
 			except ValueError: 
 				print("Please enter a valid number (0 - 5).")
 				continue
+		switchReset(player)
 		print("Come back, " + player.curPoke.name + "!")
 		player.curPoke = player.pokemonSet[switchPoke]
 		print(player.curPoke.name + ", I choose you!")
@@ -148,19 +155,52 @@ def switchCheck(p):
 				p.curPoke.toxicCount += 1
 			print("Toxic spikes dug into " + p.curPoke.name + "!")
 
+#Resets all statuses that should be reset when switched out.
+def switchReset(p):
+	p.curPoke.confused = 0
+	p.curPoke.attack = p.curPoke.baseattack
+	p.curPoke.defense = p.curPoke.basedefense
+	p.curPoke.spAttack = p.curPoke.basespAttack
+	p.curPoke.spDefense = p.curPoke.basespDefense
+	p.curPoke.accuracy = 1
+	p.curPoke.taunt = 0
+	p.curPoke.sub = False
+
+
 #Makes a move given player, opponent, and the chosen moves of both.
 def makeMove(p, o, pM, oM):
-	#Check if pM is None. If so, then player has switched Pokemon. 
-		#Thus, carry on oM and end turn.
-	#If pM is not None, then:
-		#First check whether either move is priority. If so, then speed doesn't matter.
-		#Otherwise, the first move will be used by Pokemon w/ higher speed.
-
-		#From here on, execute the first move, then the second.
-			#Hardcode each move and its effects (make it somewhat efficient by grouping)
-			#Damage calculation if necessary, if not then move.phys == None.
-			#After each move, faintCheck(player). If fainted, then call switchPokemon(player).
-	return None
+	if not pM and not oM:
+		return
+	if not pM:
+		me.attack(o, p, oM)
+		if faintCheck(p):
+			afterFaint(p)
+		return
+	if not oM:
+		me.attack(p, o, pM)
+		if faintCheck(o):
+			afterFaint(o)
+		return
+	else:
+		pFirst = me.calculatePriority(p, o, pM, oM)
+		if pFirst:
+			me.attack(p, o, pM)
+			if faintCheck(o):
+				afterFaint(o)
+				return
+			me.attack(o, p, oM)
+			if faintCheck(p):
+				afterFaint(p)
+				return
+		else:
+			me.attack(o, p, oM)
+			if faintCheck(p):
+				afterFaint(p)
+				return
+			me.attack(p, o, pM)
+			if faintCheck(o):
+				afterFaint(o)
+				return
 
 #Checks if the player's Pokemon has fainted, updates Pokemon hp to 0 if it becomes negative.
 def faintCheck(p):
@@ -170,42 +210,42 @@ def faintCheck(p):
 		return True
 	return False
 
-#Called when a pokemon faints. 
-def afterFaint():
-	return None
+#Called when a pokemon faints. If gameOver, then ends game.
+def afterFaint(p):
+	if gameOver(p):
+		if not p.human:
+			print("You win! You are one step closer to becoming a Pokemon Master. Thanks for playing!")
+		else:
+			print("You lost! Better luck next time, young trainer. Thanks for playing!")
+		sys.exit()
+	else:
+		switchPokemon(p)
 
-#Checks if all 6 Pokemon have fainted. If so, returns the losing player.
-def gameOver(player):
-	for poke in player.pokemonSet:
+#Checks if all 6 Pokemon have fainted.
+def gameOver(p):
+	for poke in p.pokemonSet:
 		if poke.hp > 0:
 			return False
-	return player
-
-#Calculates the damage (int) given user field status, opponent field status, player's Pokemon, 
-#opponent's Pokemon, and the move used. Also, critical hit is not accounted for in this damage calculation.
-def damageCalculation(user, receiver, pokeP, pokeO, move):
-	typeEffect = sm.typeRelation(move.attribute, pokeO.attribute1) * sm.typeRelation(move.attribute, pokeO.attribute2)
-	if move.phys:
-		a = pokeP.attack
-		d = pokeO.defense
-	elif move.phys == False:
-		a = pokeP.spAttack
-		d = pokeO.spDefense
-	if move.attribute == pokeP.attribute1 or move.attribute == pokeP.attribute2:
-		stab = 1.5
-	else:
-		stab = 1
-	nonMod = (0.44 * (a/d) * move.damage) + 2
-	mod = stab * typeEffect * random.uniform(0.85, 1.00)
-	totalDamage = int(nonMod * mod)
-	return totalDamage
-
+	return True
+	
 ### Turn End Checks ###
 
 #Checks for conditions that should be checked at the end of each turn.
 def turnEndCheck(p, o):
 	weatherDamageCheck(p, o)
 	statusDamageCheck(p, o)
+	if p.reflect:
+		p.reflect -= 1
+	if o.reflect:
+		o.reflect -= 1
+	if p.screen:
+		p.screen -= 1
+	if o.screen:
+		o.screen -= 1
+	if p.curPoke.taunt:
+		p.curPoke.taunt -= 1
+	if o.curPoke.taunt:
+		o.curPoke.taunt -= 1
 
 #Checks for weather, called at the end of every turn.
 def weatherDamageCheck(p, o):
@@ -260,15 +300,18 @@ def main():
 		#Pokemon switch option
 		if choice == 4:
 			switchPokemon(player)
-			switchCheck(player)
 		#Move option
 		pMove = None
 		if choice in [0, 1, 2, 3]:
 			pMove = player.curPoke.moves[choice]
-
-		#Opponent choose a move. Random for now.
+		#Opponent choose a move. Random for now. Switch if taunt is in effect.
 		oMove = opponent.curPoke.moves[random.randint(0, len(opponent.curPoke.moves) - 1)]
-		#makeMove(player, opponent, pMove, oMove). 
+		if opponent.curPoke.taunt:
+			if oMove.damage > 0:
+				switchPokemon(opponent)
+				oMove = None
+
+		makeMove(player, opponent, pMove, oMove)
 
 	playing = False
 

@@ -27,10 +27,10 @@ class Pokemon:
 		self.moves = moves #set of moves, length 4 Move array
 		#self.items = items mmmm maybe later
 		#Booleans
-		self.confused = False #Confused status
+		self.confused = 0 #Confused status
 		self.sub = False #Substitute existence
 		self.protect = False #Protect
-		self.taunt = False #Taunt
+		self.taunt = 0 #Taunt
 
 #The Move Class
 class Move:
