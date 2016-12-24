@@ -11,7 +11,7 @@ pokemon.Move('Fire Blast', 'Fire', 110, False, 85, 5),
 #10% chance of burn
 pokemon.Move('Superpower', 'Fighting', 120, True, 100, 5),
 #att, def 1 stage down
-pokemon.Move('ExtremeSpeed', 'Normal', 80, True, 100, 5),
+pokemon.Move('ExtremeSpeed', 'Normal', 80, True, 100, 5), 
 #priority
 
 pokemon.Move('Pain Split', 'Normal', 0, None, 100, 20),
@@ -68,7 +68,7 @@ pokemon.Move('Stealth Rock', 'Rock', 100, None, 80, 5),
 pokemon.Move('Ice Fang', 'Ice', 65, True, 95, 15),
 #10% chance of ice
 
-pokemon.Move('Ice Shard', 'Ice', 40, True, 100, 30),
+pokemon.Move('Ice Shard', 'Ice', 40, True, 100, 30), 
 #priority
 pokemon.Move('Icicle Crash', 'Ice', 85, True, 90, 10),
 #critical x1.5, 30% chance
@@ -83,8 +83,8 @@ pokemon.Move('Hidden Power Ice', 'Ice', 60, False, 100, 15),
 #10% chance of Ice
 pokemon.Move('Focus Blast', 'Fighting', 120, False, 70, 5),
 #lower spD by 1 stage, 10% chance
-pokemon.Move('Sucker Punch', 'Dark', 70, True, 100, 5),
-#has priority, but fails if opponent chose a move that gives damage
+pokemon.Move('Sucker Punch', 'Dark', 70, True, 100, 5), 
+#has priority
 
 pokemon.Move('Hurricane', 'Flying', 110, False, 70, 10),
 #confuse 30% chance
@@ -134,7 +134,7 @@ pokemon.Move('Facade', 'Normal', 70, True, 100, 20),
 
 pokemon.Move('Close Combat', 'Fighting', 120, True, 100, 5),
 #lower def and spDef by 1 stage
-pokemon.Move('ExtremeSpeed', 'Normal', 80, True, 100, 5),
+pokemon.Move('ExtremeSpeed', 'Normal', 80, True, 100, 5), 
 #priority
 pokemon.Move('Crunch', 'Dark', 80, True, 100, 15),
 #lower def 20% chance
@@ -143,8 +143,8 @@ pokemon.Move('Ice Punch', 'Ice', 75, True, 100, 15),
 
 pokemon.Move('Swords Dance', 'Normal', 0, None, 100, 20),
 #att up by 2 stages
-pokemon.Move('Sucker Punch', 'Dark', 70, True, 100, 5),
-#has priority, but fails if opponent chose a move that gives damage
+pokemon.Move('Sucker Punch', 'Dark', 70, True, 100, 5), 
+#has priority
 pokemon.Move('Substitute', 'Normal', 0, None, 100, 10),
 #takes 1/4 and make substitute. doesn't work if hp < 1/4 base
 pokemon.Move('Brick Break', 'Fighting', 75, True, 100, 15),
