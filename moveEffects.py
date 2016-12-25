@@ -52,18 +52,18 @@ def statusTurnCheck(p):
 	return False
 
 #A hefty function that takes care of all moves!
-#In order of: 
-
-#	status attacks where attributes matter
-#	regular attacks that calculate damage
 def attack(p, o, pM):
 	cannotmove = statusTurnCheck(p)
 	if cannotmove:
 		return
 
+	#naming it n for simplicity.
 	n = pM.name
 	print(p.curPoke.name + " used " + pM.name + "!")
-	#attacks where attributes don't matter
+
+	success = True
+
+	#attacks where attributes don't matter (not affected by Substitute)
 	if n in (['Pain Split', 'Spikes', 'Rest', 'Light Screen', 'Reflect', 'Substitute', 
 	'Swords Dance', 'Slack Off', 'Stealth Rock', 'Rain Dance', 'Taunt', 'Toxic Spikes', 'Curse']):
 		if n == 'Pain Split':
@@ -75,10 +75,83 @@ def attack(p, o, pM):
 			if o.curPoke.hp > o.curPoke.basehp:
 				o.curPoke.hp = o.curPoke.basehp
 		elif n == 'Spikes':
-			o.spikes += 1
+			if o.spikes < 3:
+				o.spikes += 1
+			else:
+				success = False
 		elif n == 'Rest':
-			p.curPoke.hp = p.curPoke.basehp
-			p.curPoke.sleep = 3
+			if not p.curPoke.sleep:
+				p.curPoke.hp = p.curPoke.basehp
+				p.curPoke.sleep = 3
+			else: 
+				success = False
+		elif n == 'Light Screen':
+			if not p.screen:
+				p.screen = 5
+			else:
+				success = False
+		elif n == 'Reflect':
+			if not p.reflect:
+				p.reflect = 5
+			else: 
+				success = False
+		elif n == 'Substitute':
+			if not p.curPoke.sub:
+				p.sub = True
+			else:
+				success = False
+		elif n == 'Swords Dance':
+			p.curPoke.attack *= 2.25
+		elif n == 'Slack Off':
+			p.curPoke.hp += int(p.curPoke.basehp / 2)
+			if p.curPoke.hp > p.curPoke.basehp:
+				p.curPoke.hp = p.curPoke.basehp
+		elif n == 'Stealth Rock':
+			if not o.stealthRock:
+				o.stealthRock = True
+			else:
+				success = False
+		elif n == 'Rain Dance':
+			if not p.weather == 'Rain':
+				p.weather = 'Rain'
+				o.weather = 'Rain'
+			else:
+				success = False
+
+		### Have to fix the problem of taunting first -> the latter Pokemon uses status mvove. ###
+		elif n == 'Taunt':
+			if not o.curPoke.taunt:
+				o.curPoke.taunt = 5
+			else:
+				success = False
+		elif n == 'Toxic Spikes':
+			if o.toxicSpikes < 2:
+				o.toxicSpikes += 1
+			else:
+				success = False
+		elif n == 'Curse':
+			p.curPoke.attack *= 1.5
+			p.curPoke.defense *= 1.5
+			p.curPoke.speed *= 0.66
+
+	#status attacks where attributes matter
+	elif n in (['Will-O-Wisp', 'Night Shade', 'Confuse Ray', 'Thunder Wave']):
+		return
+
+	#regular attacks that calculate damage
+	elif n in (['Draco Meteor', 'Fire Blast', 'Superpower', 'ExtremeSpeed', 'Giga Drain', 'Hidden Power Fire',
+	'Volt Change', 'Acid Bomb', 'U-turn', 'Close Combat', 'Stone Edge', 'Leaf Blade', 'Earthquake', 'Ice Fang',
+	'Ice Shard', 'Icicle Crash', 'Night Burst', 'Hidden Power Ice', 'Focus Blast', 'Sucker Punch', 'Hurricane',
+	'Hammer Arm', 'Earth Power', 'Flamethrower', 'Ice Beam', 'Surf', 'Psychic', 'Energy Ball', 'Return', 'Fire Punch',
+	'Megahorn', 'Facade', 'Crunch', 'Brick Break']):
+		return
+
+	if not success:
+		print("But it failed!")
+
+	pM.pp -= 1
+
+	
 
 
 

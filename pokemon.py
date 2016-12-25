@@ -30,7 +30,7 @@ class Pokemon:
 		self.sub = False #Substitute existence
 		self.protect = False #Protect
 		self.taunt = 0 #Taunt
-		self.sleep = 0 #sleep for 2 turns
+		self.sleep = 0 #sleep for 3 turns
 		self.ice = 0 #ice for 3 turns
 		self.confused = 0 #confused for 3 turns
 		self.paralyze = False
@@ -45,6 +45,7 @@ class Move:
 		#Ints
 		self.damage = damage
 		self.acc = acc
+		self.basepp = pp
 		self.pp = pp
 		#Boolean
 		self.phys = phys #physical attack - True, special attack - False, neither - None

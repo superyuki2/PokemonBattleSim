@@ -60,7 +60,7 @@ def everyTurn(player, opp, p1, p2):
 	print("Current weather: " + str(player.weather))
 	print("What would you like to do? (0 - 5)")
 	for i in range(len(p1.moves)):
-		print(p1.moves[i].name + ": " + str(i))
+		print(p1.moves[i].name + " (PP: " + str(p1.moves[i].pp) + "/" + str(p1.moves[i].basepp) + "): " + str(i))
 	print("Switch Pokemon: 4")
 	print("See Pokemon stats: 5")
 
@@ -77,7 +77,7 @@ def playerChoice(player, opp):
 			#Use Move
 			elif choice in [0, 1, 2, 3]:
 				if player.curPoke.moves[choice].damage > 0 and player.curPoke.taunt:
-					print(player.curPoke.name + "has been taunted and can not attack!")
+					print(player.curPoke.name + " has been taunted and can not attack!")
 					continue
 				else: 
 					goodInput = True
@@ -163,6 +163,7 @@ def switchReset(p):
 	p.curPoke.spAttack = p.curPoke.basespAttack
 	p.curPoke.spDefense = p.curPoke.basespDefense
 	p.curPoke.accuracy = 1
+	p.curPoke.confused = 0
 	p.curPoke.taunt = 0
 	p.curPoke.sub = False
 
@@ -179,7 +180,7 @@ def makeMove(p, o, pM, oM):
 		if faintCheck(o):
 			afterFaint(o)
 			return
-	if not oM:
+	elif not oM:
 		me.attack(p, o, pM)
 		if faintCheck(p):
 			afterFaint(p)
@@ -252,18 +253,11 @@ def gameOver(p):
 def turnEndCheck(p, o):
 	weatherDamageCheck(p, o)
 	statusDamageCheck(p, o)
-	if p.reflect:
-		p.reflect -= 1
-	if o.reflect:
-		o.reflect -= 1
-	if p.screen:
-		p.screen -= 1
-	if o.screen:
-		o.screen -= 1
-	if p.curPoke.taunt:
-		p.curPoke.taunt -= 1
-	if o.curPoke.taunt:
-		o.curPoke.taunt -= 1
+	if faintCheck(p):
+		afterFaint(p)
+	if faintCheck(o):
+		afterFaint(o)
+	moveDurationCheck(p, o)
 
 #Checks for weather, called at the end of every turn.
 def weatherDamageCheck(p, o):
@@ -281,7 +275,6 @@ def weatherDamageCheck(p, o):
 
 #Checks for status, called at the end of every turn.
 def statusDamageCheck(p, o):
-	#Player
 	if p.curPoke.status == 'Burn':
 		p.curPoke.hp -= int(p.curPoke.basehp/8)
 	elif p.curPoke.status == 'Poison':
@@ -289,7 +282,7 @@ def statusDamageCheck(p, o):
 	elif p.curPoke.status == 'Toxic':
 		p.curPoke.hp -= int(p.curPoke.basehp/16 * p.curPoke.toxicCount)
 		p.curPoke.toxicCount += 1
-	#Opponent
+
 	if o.curPoke.status == 'Burn':
 		o.curPoke.hp -= int(o.curPoke.basehp/8)
 	elif o.curPoke.status == 'Poison':
@@ -297,6 +290,34 @@ def statusDamageCheck(p, o):
 	elif o.curPoke.status == 'Toxic':
 		o.curPoke.hp -= int(o.curPoke.basehp/16 * o.curPoke.toxicCount)
 		o.curPoke.toxicCount += 1
+
+#Checks for non-statuses.
+def moveDurationCheck(p, o):
+	if p.reflect:
+		p.reflect -= 1
+		if p.reflect == 0:
+			print("Your Reflect has worn out!")
+	if p.screen:
+		p.screen -= 1
+		if p.screen == 0:
+			print("Your Light Screen has worn out!")
+	if p.curPoke.taunt:
+		p.curPoke.taunt -= 1
+		if p.curPoke.taunt == 0:
+			print("Your " + p.curPoke.name + " is no longer taunted!")
+
+	if o.screen:
+		o.screen -= 1
+		if o.screen == 0:
+			print("Your opponent's Reflect has worn out!")
+	if o.reflect:
+		o.reflect -= 1
+		if o.reflect == 0:
+			print("Your opponent's Light Screen has worn out!")
+	if o.curPoke.taunt:
+		o.curPoke.taunt -= 1
+		if o.curPoke.taunt == 0:
+			print("Your opponent's " + o.curPoke.name + " is no longer taunted!")
 
 def main():
 	print("Welcome to Pokemon Battle Simulator! Your Pokemon will be chosen now.")
@@ -309,8 +330,6 @@ def main():
 	beginningPrompt(player, opponent)
 
 	#Game starts
-	player.curPoke.confused = 100
-
 	playing = True
 	while playing:
 		#Ask for choice of player. Also includes everyTurn method
@@ -324,12 +343,22 @@ def main():
 			pMove = player.curPoke.moves[choice]
 		#Opponent choose a move. Random for now. Switch if taunt is in effect.
 		oMove = opponent.curPoke.moves[random.randint(0, len(opponent.curPoke.moves) - 1)]
+
+		#Opponent switches if taunted.
 		if opponent.curPoke.taunt:
 			if oMove.damage > 0:
 				switchPokemon(opponent)
 				oMove = None
+		
+		#Check for remaining pp.
+		if pMove and pMove.pp == 0:
+			print("Your move doesn't have enough pp left. Please choose another move.")
+			continue
 
 		makeMove(player, opponent, pMove, oMove)
+
+
+		turnEndCheck(player, opponent)
 
 	playing = False
 
