@@ -48,3 +48,4 @@ class Move:
 		self.pp = pp
 		#Boolean
 		self.phys = phys #physical attack - True, special attack - False, neither - None
+
