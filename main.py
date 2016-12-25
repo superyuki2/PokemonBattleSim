@@ -175,16 +175,25 @@ def makeMove(p, o, pM, oM):
 		me.attack(o, p, oM)
 		if faintCheck(p):
 			afterFaint(p)
-		return
-	if not oM:
-		me.attack(p, o, pM)
+			return
 		if faintCheck(o):
 			afterFaint(o)
-		return
+			return
+	if not oM:
+		me.attack(p, o, pM)
+		if faintCheck(p):
+			afterFaint(p)
+			return
+		if faintCheck(o):
+			afterFaint(o)
+			return
 	else:
 		pFirst = me.calculatePriority(p, o, pM, oM)
 		if pFirst:
 			me.attack(p, o, pM)
+			if faintCheck(p):
+				afterFaint(p)
+				return
 			if faintCheck(o):
 				afterFaint(o)
 				return
@@ -192,12 +201,21 @@ def makeMove(p, o, pM, oM):
 			if faintCheck(p):
 				afterFaint(p)
 				return
+			if faintCheck(o):
+				afterFaint(o)
+				return
 		else:
 			me.attack(o, p, oM)
 			if faintCheck(p):
 				afterFaint(p)
 				return
+			if faintCheck(o):
+				afterFaint(o)
+				return
 			me.attack(p, o, pM)
+			if faintCheck(p):
+				afterFaint(p)
+				return
 			if faintCheck(o):
 				afterFaint(o)
 				return
@@ -285,14 +303,14 @@ def main():
 	player = Player(True)
 	opponent = Player(False)
 	#Choose the 6 initial pokemon for both players.
-	print(player.human)
-	print(opponent.human)
 	choosePokeRandom(player)
 	choosePokeRandom(opponent)
 	#Handles beginning where starter Pokemon are chosen. 
 	beginningPrompt(player, opponent)
 
 	#Game starts
+	player.curPoke.confused = 100
+
 	playing = True
 	while playing:
 		#Ask for choice of player. Also includes everyTurn method
