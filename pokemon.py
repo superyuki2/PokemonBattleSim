@@ -25,12 +25,16 @@ class Pokemon:
 		self.accuracy = 1
 
 		self.moves = moves #set of moves, length 4 Move array
-		#self.items = items mmmm maybe later
-		#Booleans
-		self.confused = 0 #Confused status
+		#self.items = items
+		
 		self.sub = False #Substitute existence
 		self.protect = False #Protect
 		self.taunt = 0 #Taunt
+		self.sleep = 0 #sleep for 2 turns
+		self.ice = 0 #ice for 3 turns
+		self.confused = 0 #confused for 3 turns
+		self.paralyze = False
+
 
 #The Move Class
 class Move:
