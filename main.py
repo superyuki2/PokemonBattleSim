@@ -76,8 +76,8 @@ def playerChoice(player, opp):
 				continue
 			#Use Move
 			elif choice in [0, 1, 2, 3]:
-				if player.curPoke.moves[choice].damage > 0 and player.curPoke.taunt:
-					print(player.curPoke.name + " has been taunted and can not attack!")
+				if player.curPoke.moves[choice].damage == 0 and player.curPoke.taunt:
+					print(player.curPoke.name + " has been taunted and has to attack!")
 					continue
 				else: 
 					goodInput = True
@@ -138,13 +138,13 @@ def switchCheck(p):
 		p.curPoke.hp -= (int(p.curPoke.basehp/8 * sm.typeRelation('Rock', p.curPoke.attribute1) * 
 			sm.typeRelation('Rock', p.curPoke.attribute2)))
 		print("Stealth Rock gave damage to " + p.curPoke.name + "!")
-		if faintCheck(p.curPoke):
+		if faintCheck(p):
 			return
 	if p.spikes:
 		if not (sm.isIneffective('Ground', p.curPoke.attribute1) or sm.isIneffective('Ground', p.curPoke.attribute2)):
 			p.curPoke.hp -= int(p.curPoke.basehp/8 * p.spikes)
 			print("Spikes gave damage to " + p.curPoke.name + "!")
-			if faintCheck(p.curPoke):
+			if faintCheck(p):
 				return
 	if (p.toxicSpikes) and p.curPoke.status == None:
 		if not ((p.curPoke.attribute1 in ['Flying', 'Poison', 'Steel']) or (p.curPoke.attribute2 in ['Flying', 'Poison', 'Steel'])):
@@ -340,16 +340,15 @@ def main():
 		#Move option
 		pMove = None
 		if choice in [0, 1, 2, 3]:
-			pMove = player.curPoke.moves[choice]
-		#Opponent choose a move. Random for now. Switch if taunt is in effect.
-		oMove = opponent.curPoke.moves[random.randint(0, len(opponent.curPoke.moves) - 1)]
-
+			pMove = moveChoice(player, choice)
+		#Opponent choose a move. Random for now.
+		oMove = moveChoice(opponent, choice)
 		#Opponent switches if taunted.
 		if opponent.curPoke.taunt:
-			if oMove.damage > 0:
+			if oMove.damage == 0:
 				switchPokemon(opponent)
 				oMove = None
-		
+
 		#Check for remaining pp.
 		if pMove and pMove.pp == 0:
 			print("Your move doesn't have enough pp left. Please choose another move.")
@@ -357,10 +356,26 @@ def main():
 
 		makeMove(player, opponent, pMove, oMove)
 
-
 		turnEndCheck(player, opponent)
 
 	playing = False
+
+#Sets move to choice. 
+def moveChoice(p, choice):
+	struggle = True
+	for move in p.curPoke.moves:
+		if move.pp != 0:
+			struggle = False
+	if struggle:
+		return pokemon.Move('Struggle', 'Normal', 50, True, 100, 100)
+	else:
+		if p.human:
+			return p.curPoke.moves[choice]
+		if not p.human:
+			randmove = p.curPoke.moves[random.randint(0, len(p.curPoke.moves) - 1)]
+			while randmove.pp == 0:
+				randmove = p.curPoke.moves[random.randint(0, len(p.curPoke.moves) - 1)]
+			return randmove
 
 
 if __name__ == "__main__":

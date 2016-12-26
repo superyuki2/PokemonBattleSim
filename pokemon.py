@@ -33,7 +33,6 @@ class Pokemon:
 		self.sleep = 0 #sleep for 3 turns
 		self.ice = 0 #ice for 3 turns
 		self.confused = 0 #confused for 3 turns
-		self.paralyze = False
 
 
 #The Move Class
